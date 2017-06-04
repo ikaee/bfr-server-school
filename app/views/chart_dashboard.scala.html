@@ -1,0 +1,44 @@
+@()(implicit m: Messages)
+<div class="tab-pane" id="chartjs">
+    <div class="row">
+        <div class="col-lg-3">
+            <section class="panel">
+                <header class="panel-heading">
+                    <label class="count-label">@Messages("chart.gender")</label>
+                </header>
+                <div class="panel-body text-center">
+                    <canvas id="doughnut" height="300" width="200"></canvas>
+                    <span class="label label-male">Male</span>
+                    <span class="label label-female">Female</span>
+                </div>
+            </section>
+        </div>
+        <div class="col-lg-5">
+            <section class="panel">
+                <header class="panel-heading">
+                    <label class="count-label">@Messages("chart.month")</label>
+                </header>
+                <div class="panel-body text-center">
+                    <span class="label label-month-count" style="float:left">Count</span>
+                    <canvas id="bar" height="300" width="400" ></canvas>
+                    <span class="label label-month" style="float:right">Month</span>
+                </div>
+            </section>
+        </div>
+        <div class="col-lg-4">
+            <section class="panel">
+                <header class="panel-heading">
+                    <label class="count-label">@Messages("chart.age")</label>
+                </header>
+                <div class="panel-body text-center">
+                    <canvas id="polarArea" height="300" width="330"></canvas>
+                    <span class="label label-0m-6m">0m-6m</span>
+                    <span class="label label-6m-2Y">6m-2Y</span>
+                    <span class="label label-2Y-3_5Y">2Y-3.5Y</span>
+                    <span class="label label-3_5Y-6Y">3.5Y-6Y</span>
+                </div>
+            </section>
+        </div>
+
+    </div>
+</div>

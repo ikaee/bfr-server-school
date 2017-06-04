@@ -1,0 +1,19 @@
+application                 = BFR
+application.name            = BFR Attendant
+application.title           = BFR
+
+
+# SideBar
+sidebar.dashboard           = Dashboard
+sidebar.admin               = ADMIN
+
+# Dashboard Charts
+chart.grade.total           = Total
+chart.grade.present         = Present
+chart.grade.percentage      = Percentage
+chart.gender                = Gender Wise
+chart.month                 = Month Wise
+chart.age                   = Age Group Wise
+
+company.name                = Ikaee
+

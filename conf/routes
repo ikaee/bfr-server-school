@@ -1,0 +1,12 @@
+# An example controller showing a sample home page
+GET     /                           controllers.HomeController.index
+
+POST     /bfr/v1/attendance-entry   controllers.AttendanceEntry.entry
+
+#Registration
+GET    /bfr/v1/registration        controllers.RegistrationController.registrationForm
+POST   /bfr/v1/registration        controllers.RegistrationController.submitRegistration
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

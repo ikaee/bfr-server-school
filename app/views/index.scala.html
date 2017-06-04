@@ -1,0 +1,12 @@
+
+@(message: String)(implicit m: Messages)
+@title = @{Messages("application.title")}
+
+@main(title){
+     <!--sidebar start-->
+     @sidebar()
+     <!--sidebar end-->
+     <!-- Dashboard Aggregation Start -->
+     @dashboard()
+     <!-- Dashboard Aggregation End -->
+}

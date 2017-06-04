@@ -1,0 +1,21 @@
+@()(implicit m: Messages)
+<aside>
+    <div id="sidebar"  class="nav-collapse ">
+        <!-- sidebar menu start-->
+        <ul class="sidebar-menu" id="nav-accordion">
+            <li>
+                <a class="active" href="@routes.HomeController.index">
+                    <i class="fa fa-dashboard"></i>
+                    <span>@Messages("sidebar.dashboard")</span>
+                </a>
+            </li>
+            <li class="sub-menu">
+                <a href="@routes.RegistrationController.registrationForm" >
+                    <i class=" fa fa-user"></i>
+                    <span>@Messages("sidebar.admin")</span>
+                </a>
+            </li>
+        </ul>
+        <!-- sidebar menu end-->
+    </div>
+</aside>

@@ -1,0 +1,52 @@
+
+<section id="main-content">
+    <section class="wrapper">
+        <div class="col-lg-6">
+            <section class="panel">
+                <header class="panel-heading">
+                    Registration Form
+                </header>
+                <div class="panel-body">
+                    <form action="/bfr/v1/registration" method="POST">
+                        <div style="display: none;">
+                            <label for="doctype">Doctype</label>
+                            <input type="text" id="doctype"
+                                   name="doctype" value="registration" />
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name"
+                                   name="name" value="" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="surname">Surname</label>
+                            <input type="text" id="surname"
+                                   name="surname" value="" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="dob">DOB</label>
+                            <input type="text" id="dob"
+                                   name="dob" value="" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentcode">Student Code</label>
+                            <input type="text" id="studentcode"
+                                   name="studentcode" value="" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="schoolcode">School Code</label>
+                            <input type="text" id="schoolcode"
+                                   name="schoolcode" value="" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <input type="text" id="gender"
+                                   name="gender" value="" class="form-control"/>
+                        </div>
+                        <button type="submit" class="btn btn-info">Submit</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </section>
+</section>
