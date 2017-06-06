@@ -46,6 +46,6 @@ case class Registration(
                          name: String,
                          surname: String,
                          dob: String,
-                         studentCode: String,
-                         schoolCode: String,
+                         studentcode: String,
+                         schoolcode: String,
                          gender: Char)
