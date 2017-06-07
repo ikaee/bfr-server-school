@@ -1,12 +1,15 @@
 package model
 
-import dao.{DocumentDB}
+import java.text.SimpleDateFormat
+import java.util.Calendar
+
+import dao.DocumentDB
 import play.api.libs.json.{JsValue, Json, Writes}
 
 /**
   * Created by kirankumarbs on 6/6/17.
   */
-case class BfrDashboardData(gradeData: GradeData,
+case class BfrDashboardData(attendanceData: AttendanceData,
                             genderData: List[GenderData],
                             ageData: List[AgeData],
                             monthData: MonthData)
@@ -20,7 +23,7 @@ object BfrDashboardData{
   }
 
   private def createBfrDashboardData(md: Map[String, String]): BfrDashboardData =
-    BfrDashboardData(GradeData(md), GenderData(md), AgeData(md), MonthData(md))
+    BfrDashboardData(AttendanceData(md), GenderData(md), AgeData(md), MonthData(md))
 
   /**
     * Converting from Entity to Json while service returning response
@@ -28,7 +31,7 @@ object BfrDashboardData{
   implicit val bfrDashboardDataWrites = new Writes[BfrDashboardData] {
     override def writes(epgmDD: BfrDashboardData): JsValue = {
       Json.obj(
-        "grade_data"  -> GradeData(epgmDD.gradeData),
+        "attendance_data"  -> AttendanceData(epgmDD.attendanceData),
         "gender_data"  -> GenderData(epgmDD.genderData),
         "age_data"  -> AgeData(epgmDD.ageData),
         "month_data"  -> MonthData(epgmDD.monthData)
@@ -43,10 +46,10 @@ case class AgeData(value: Int, color: String)
 object AgeData {
   def apply(ad: Map[String, String]): List[AgeData] =
   {
-    AgeData(ad.get("zerotoonecount").getOrElse("0").toInt,  "#a1887f") ::
-      AgeData(ad.get("onetotwocount").getOrElse("0").toInt,   "#bb8fce") ::
-      AgeData(ad.get("twotothreecount").getOrElse("0").toInt, "#ccd1d1") ::
-      AgeData(ad.get("threetofourcount").getOrElse("0").toInt,"#f7dc6f") :: Nil
+    AgeData(ad.get("6-8").getOrElse("0").toInt,  "#a1887f") ::
+      AgeData(ad.get("9-11").getOrElse("0").toInt,   "#bb8fce") ::
+      AgeData(ad.get("12-13").getOrElse("0").toInt, "#ccd1d1") ::
+      AgeData(ad.get("14+").getOrElse("0").toInt,"#f7dc6f") :: Nil
   }
   def apply(ads: List[AgeData]) = ads.map(ad => Json.obj("value" -> ad.value, "color" -> ad.color))
 }
@@ -63,17 +66,17 @@ object GenderData {
   def apply(gds: List[GenderData]) = gds.map(gd => Json.obj("value" -> gd.value, "color" -> gd.color))
 }
 
-case class GradeData(total: Int, present: Int, percentage: Int)
+case class AttendanceData(total: Int, present: Int, percentage: Int)
 
-object GradeData {
-  def apply(gd: Map[String, String]): GradeData = {
+object AttendanceData {
+  def apply(gd: Map[String, String]): AttendanceData = {
 
-    GradeData(gd.get("total").getOrElse("0").toInt
+    AttendanceData(gd.get("total").getOrElse("0").toInt
       ,gd.get("present").getOrElse("0").toInt
       ,gd.get("percentage").getOrElse("0").toInt
     )
   }
-  def apply(gd: GradeData) =
+  def apply(gd: AttendanceData) =
     Json.obj("total"  -> gd.total, "present"  -> gd.present, "percentage"  -> gd.percentage)
 }
 
@@ -86,12 +89,15 @@ object MonthData{
 
     val mConst = Map("01" -> "Jan","02" -> "Feb","03" -> "Mar","04" -> "Apr","05" -> "May","06" -> "Jun","07" -> "Jul","08" -> "Aug","09" -> "Sep","10" -> "Oct",
       "11" -> "Nov","12" -> "Dec")
-    val currDt = md.get("currentmonth").getOrElse("01")
+    val now = Calendar.getInstance().getTime()
+    val monthFormat = new SimpleDateFormat("MM")
+    val currDt = monthFormat.format(now)
 
-    //val currYr = md.get("currentyear").get
-    val mDataRaw = List("01" -> md.get("januarycount").getOrElse("0"), "02" -> md.get("februarycount").getOrElse("0"),"03" -> md.get("marchcount").getOrElse("0"), "04" -> md.get("aprilcount").getOrElse("0"),
-      "05" -> md.get("maycount").getOrElse("0"), "06" -> md.get("junecount").getOrElse("0"), "07" -> md.get("julycount").getOrElse("0"), "08" -> md.get("augustcount").getOrElse("0"), "09" -> md.get("septembercount").getOrElse("0"),
-      "10" -> md.get("octobercount").getOrElse("0"),"11" -> md.get("novembercount").getOrElse("0"), "12" -> md.get("decembercount").getOrElse("0"))
+    val mDataRaw: List[(String, String)] =
+      List("01" -> md.get("01").getOrElse("0"), "02" -> md.get("02").getOrElse("0"), "03" -> md.get("03").getOrElse("0"),
+        "04" -> md.get("04").getOrElse("0"), "05" -> md.get("05").getOrElse("0"), "06" -> md.get("06").getOrElse("0"),
+        "07" -> md.get("07").getOrElse("0"), "08" -> md.get("08").getOrElse("0"), "09" -> md.get("09").getOrElse("0"),
+        "10" -> md.get("10").getOrElse("0"), "11" -> md.get("11").getOrElse("0"), "12" -> md.get("12").getOrElse("0"))
 
     def prepareMonthData(raw: List[(String, String)]): List[(String, String)] = {
       def loop(raw: List[(String, String)], acc: List[(String, String)]): List[(String, String)] = raw match {

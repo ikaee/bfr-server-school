@@ -3,8 +3,12 @@ GET     /                           controllers.HomeController.index
 
 POST     /bfr/v1/attendance-entry   controllers.AttendanceEntry.entry
 
+# Dashboard
 GET      /bfr/v1/dashboard     controllers.Dashboard.data
 
+# Attendance Monitoring Report
+GET      /bfr/v1/amr/:schoolcode           controllers.AmrController.getAMR(schoolcode)
+GET      /amr           controllers.AmrController.displayAMR
 
 
 #Registration

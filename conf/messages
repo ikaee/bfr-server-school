@@ -6,6 +6,7 @@ application.title           = BFR
 # SideBar
 sidebar.dashboard           = Dashboard
 sidebar.admin               = ADMIN
+sidebar.amr                 = AMR
 
 # Dashboard Charts
 chart.grade.total           = Total
