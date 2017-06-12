@@ -22,19 +22,27 @@ object DocumentDB {
       case Nil => Nil
       case xs => xs
     }
+    println("Master Data is ===>"+ master)
 
     val present = queryDatabase(client, "SELECT * FROM coll where coll.doctype = \"attendance\" and coll.schoolcode = \""+schoolCode+"\"").toList match {
       case Nil => Nil
       case xs => xs
     }
+    println("Present Data is ===>"+ present)
 
     implicit def convert(o: Object): String = o.toString()
 
-    present.map(p => master.find(m => m.get("studentcode") == p.get("studentcode")) match {
-      case None => throw new Error("Master Data is not Available")
+
+    var amrs = present.map(p => master.find(m => m.get("studentcode") == p.get("studentcode")) match {
+      case None => None
       case Some(m) =>
-        AMRData(m.get("studentcode"), m.get("name"),m.get("surname"), m.get("gender"), m.get("dob"), p.get("datestamp"))
+        Some(AMRData(m.get("studentcode"), m.get("name"),m.get("surname"), m.get("gender"), m.get("dob"), p.get("datestamp")))
     })
+
+    amrs match {
+      case Nil => Nil
+      case xs => xs.filter(_.isDefined).map(_.get)
+    }
 
   }
 
