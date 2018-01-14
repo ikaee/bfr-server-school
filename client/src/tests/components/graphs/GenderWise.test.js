@@ -22,12 +22,12 @@ describe('Gender wise Graph',()=>{
     });
 
     it('has title',()=>{
-        const title = <GraphTitle title={"Gender Wise"}/>
+        const title = <GraphTitle title={"Gender Wise"}/>;
         expect(genderWiseComponent).toContainReact(title);
     });
 
     it('has Doughnut graph',()=>{
-        const genderGraph = <Doughnut data={data} height="200" width="200" />
+        const genderGraph = <Doughnut data={data} height="200" width="200" />;
         expect(genderWiseComponent.props().children[1]).toEqual(genderGraph)
     });
 

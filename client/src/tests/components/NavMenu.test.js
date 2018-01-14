@@ -5,7 +5,6 @@ import {shallow} from "enzyme";
 import AMR from "../../src/components/AMR";
 import Admin from "../../src/components/Admin";
 import {Tab} from "pui-react-tabs";
-import renderer from 'react-test-renderer';
 
 
 describe('NavMenu component', () => {
@@ -22,8 +21,8 @@ describe('NavMenu component', () => {
         expect(tabs[2].props.title).toEqual("Admin")
     });
 
-    it('render Dashboard tab by default',()=>{
-        const dashboardTab =  <Tab eventKey={1} title="Dashboard">{<Dashboard />}</Tab>
+    it('render Dashboard tab by default', () => {
+        const dashboardTab = <Tab eventKey={1} title="Dashboard">{<Dashboard/>}</Tab>
         expect(navMenu.find("LeftTabs").props().defaultActiveKey).toEqual(1);
         expect(navMenu.find("LeftTabs")).toContainReact(dashboardTab);
 
