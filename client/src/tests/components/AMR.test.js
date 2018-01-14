@@ -60,8 +60,8 @@ describe('AMR component', () => {
     let component;
     beforeEach(() => {
         mock = new MockAdapter(axios);
-        mock.onGet('/getAMRDropdown').reply(200, dropDownData);
-        mock.onGet(`/getAMRData/${code}`).reply(200, reportData);
+        mock.onGet('/amr/dropdown').reply(200, dropDownData);
+        mock.onGet(`/bfr/v1/amr/${code}`).reply(200, {"data": reportData});
         component = shallow(<AMR/>);
     });
 
@@ -136,6 +136,17 @@ describe('AMR component', () => {
         const image = <img src={"data:image/jpeg;base64,bitmapString"} style={{"height": "40px", "width": "40px"}}/>
         expect(component.instance().convertImage(reportData[0]).image).toEqual(image);
     });
+    it("should no call api when selected option is cancelled from dropdown", done => {
+        let selectedOption = {value: code, label: "Bar"};
+        component.find("Select").props().onChange(selectedOption)
+        component.find("Select").props().onChange(null)
+        setTimeout(() => {
+            // expect(component.state().selectedOption).toEqual('')
+            // expect(component.state().reportData).toEqual([])
+            done();
+        }, 0)
+
+    })
 
 
 });

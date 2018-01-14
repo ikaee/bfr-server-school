@@ -10,14 +10,19 @@ import play.api.mvc.{Action, Controller}
 /**
   * Created by kirankumarbs on 7/6/17.
   */
-class AmrController @Inject() (val messagesApi: MessagesApi) extends Controller with I18nSupport{
+class AmrController @Inject()(val messagesApi: MessagesApi) extends Controller with I18nSupport {
 
-  def getAMR(schoolCode: String) = Action{
+  def getAMR(schoolCode: String) = Action {
     Ok(Json.toJson(AMRData(schoolCode)))
   }
 
-  def displayAMR = Action{
-    Ok(views.html.amr("BFR"))
+  def getAMRDropDown() = Action {
+    Ok(
+      Json.arr(
+        Json.obj("value" -> "asdf", "label" -> "asdf"),
+        Json.obj("value" -> "123", "label" -> "Bar")
+      )
+    )
   }
 
 
@@ -26,7 +31,6 @@ class AmrController @Inject() (val messagesApi: MessagesApi) extends Controller 
       "data" -> o
     )
   }
-
 
 
 }

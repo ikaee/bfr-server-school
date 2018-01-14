@@ -6,6 +6,7 @@ import {css, StyleSheet} from "aphrodite";
 import ReactTable from 'react-table'
 import "react-table/react-table.css";
 import image from "../images/item.bmp"
+import {Option} from "../utils/Option"
 
 export const reportTableColumns = [
     {
@@ -54,12 +55,17 @@ class AMR extends Component {
 
     onHandleChange = selectedOption => {
         //TODO make api call
-        axios.get(`/getAMRData/${selectedOption.value}`).then(({data}) => {
-            this.setState({
-                reportData: data.map(this.convertImage),
-                selectedOption
+        Option(selectedOption).fold(
+            _ => this.setState({selectedOption: '', reportData: []}),
+            _ => {
+                axios.get(`/bfr/v1/amr/${selectedOption.value}`).then(res => {
+                    this.setState({
+                        selectedOption,
+                        reportData: res.data.data.map(this.convertImage)
+                    })
+                })
+
             })
-        })
 
     }
 
@@ -87,7 +93,7 @@ class AMR extends Component {
     }
 
     componentDidMount = () => {
-        axios.get('/getAMRDropdown').then(({data}) => {
+        axios.get('/amr/dropdown').then(({data}) => {
             this.setState({
                 options: data,
             })

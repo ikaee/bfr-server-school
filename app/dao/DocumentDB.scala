@@ -36,7 +36,7 @@ object DocumentDB {
     var amrs = present.map(p => master.find(m => m.get("studentcode") == p.get("studentcode")) match {
       case None => None
       case Some(m) =>
-        Some(AMRData(m.get("studentcode"), m.get("name"),m.get("surname"), m.get("gender"), m.get("dob"), p.get("datestamp")))
+        Some(AMRData(m.get("studentcode"), m.get("name"),m.get("surname"), m.get("gender"), m.get("dob"), p.get("datestamp"), p.get("image")))
     })
 
     amrs match {

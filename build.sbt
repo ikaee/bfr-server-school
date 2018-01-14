@@ -33,3 +33,4 @@ dockerCommands := Seq(
   ExecCmd("CMD", "")
 )
 
+PlayKeys.playDefaultPort := 8080

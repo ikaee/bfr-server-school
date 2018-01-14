@@ -12,13 +12,13 @@ case class AMRData(code: String,
                    surname: String,
                    gender: String,
                    dob: String,
-                   attendance: String)
+                   attendance: String,
+                   image: String)
 
 object AMRData {
-  def apply(schoolCode: String): List[AMRData] =
-    {
-      DocumentDB.getAMR(schoolCode)
-    }
+  def apply(schoolCode: String): List[AMRData] = {
+    DocumentDB.getAMR(schoolCode)
+  }
 
   implicit val amrDataWriter: Writes[AMRData] = new Writes[AMRData] {
     override def writes(a: AMRData) = Json.obj(
@@ -27,7 +27,8 @@ object AMRData {
       "surname" -> a.surname,
       "gender" -> a.gender,
       "dob" -> a.dob,
-      "attendance" -> a.attendance
+      "attendance" -> a.attendance,
+      "image" -> a.image
     )
   }
 }

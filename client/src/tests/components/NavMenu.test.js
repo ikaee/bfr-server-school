@@ -11,7 +11,7 @@ import MockAdapter from 'axios-mock-adapter';
 
 describe('NavMenu component', () => {
     const mock = new MockAdapter(axios);
-    mock.onGet('/getAMRDropdown').reply(200, []);
+    mock.onGet('/amr/dropdown').reply(200, []);
     const navMenu = shallow(<NavMenu/>);
 
     it('should render', () => {

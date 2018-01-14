@@ -23,20 +23,9 @@ class RegistrationController @Inject() (val messagesApi: MessagesApi) extends Co
     "gender" -> char
   )(Registration.apply)(Registration.unapply))
 
-  def registrationForm = Action {
-    Ok(views.html.registrationFormTemplate(registration))
-  }
 
   def submitRegistration = Action { request =>
-    registration.bindFromRequest()(request).fold(
-      (formContainingErrors: Form[Registration]) => {
-        BadRequest(views.html.registrationFormTemplate(formContainingErrors))
-      },
-      (registration: Registration) => {
-        DocumentDB.insertFormRegistration(registration)
-        Redirect("/")
-      }
-    )
+    Ok("")
   }
 
 }
