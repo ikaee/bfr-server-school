@@ -5,11 +5,14 @@ import {shallow} from "enzyme";
 import AMR from "../../src/components/AMR";
 import Admin from "../../src/components/Admin";
 import {Tab} from "pui-react-tabs";
-import renderer from 'react-test-renderer';
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
 
 
 describe('NavMenu component', () => {
-    let navMenu = shallow(<NavMenu/>);
+    const mock = new MockAdapter(axios);
+    mock.onGet('/getAMRDropdown').reply(200, []);
+    const navMenu = shallow(<NavMenu/>);
 
     it('should render', () => {
         shallow(<NavMenu/>)
