@@ -5,7 +5,6 @@ import axios from 'axios';
 import {css, StyleSheet} from "aphrodite";
 import ReactTable from 'react-table'
 import "react-table/react-table.css";
-import image from "../images/item.bmp"
 import {Option} from "../utils/Option"
 
 export const reportTableColumns = [
