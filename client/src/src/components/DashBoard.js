@@ -2,8 +2,7 @@ import React from "react";
 import GenderWise from "./graphs/GenderWise";
 import MonthWise from "./graphs/MonthWise";
 import AgeWise from "./graphs/AgeWise";
-import MetricsComponent from "./MetricsComponent";
-import FaGroup from 'react-icons/lib/fa/group';
+import MetricsDashboard from './MetricsDashboard';
 
 const data = [
     {
@@ -16,9 +15,11 @@ const data = [
     }];
 const Dashboard = () =>
     <div>
-        <MetricsComponent label={"Present"} consolidatedCount={12} Icon={FaGroup}/>
-        <GenderWise title={"Gender Wise"} data={data}/>
-        <MonthWise/>
-        <AgeWise/>
+        <MetricsDashboard present={10} total={20} percentage={50}/>
+        <div style={{float:'left', margin:'80px'}}>
+            <div style={{float:'left',backgroundColor:'white'}}><GenderWise title={"Gender Wise"} data={data}/></div>
+            <div style={{float:'left',backgroundColor:'white', floatLeft:'50px'}}><MonthWise/></div>
+            <div style={{float:'left',backgroundColor:'white'}}><AgeWise/></div>
+        </div>
     </div>;
 export default Dashboard;
