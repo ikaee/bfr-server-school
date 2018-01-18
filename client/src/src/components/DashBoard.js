@@ -14,12 +14,15 @@ const data = [
         color: "#E2EAE9"
     }];
 const Dashboard = () =>
-    <div>
-        <MetricsDashboard present={10} total={20} percentage={50}/>
-        <div style={{float:'left', margin:'80px'}}>
-            <div style={{float:'left',backgroundColor:'white'}}><GenderWise title={"Gender Wise"} data={data}/></div>
-            <div style={{float:'left',backgroundColor:'white', floatLeft:'50px'}}><MonthWise/></div>
-            <div style={{float:'left',backgroundColor:'white'}}><AgeWise/></div>
+
+    <section class="wrapper">
+        <div>
+            <MetricsDashboard present={10} total={20} percentage={50}/>
+            <div style={{float:'left', margin:'80px'}}>
+                <div style={{float:'left',backgroundColor:'white'}}><GenderWise title={"Gender Wise"} data={data}/></div>
+                <div style={{float:'left',backgroundColor:'white', floatLeft:'50px'}}><MonthWise/></div>
+                <div style={{float:'left',backgroundColor:'white'}}><AgeWise/></div>
+            </div>
         </div>
-    </div>;
+    </section>;
 export default Dashboard;
