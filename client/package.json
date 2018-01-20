@@ -37,6 +37,7 @@
     "chart.js": "^1.1.1",
     "jest-enzyme": "^4.0.2",
     "react-chartjs": "^1.2.0",
+    "react-loader": "^2.4.2",
     "react-router-test-context": "^0.1.0",
     "react-test-renderer": "^16.2.0"
   }

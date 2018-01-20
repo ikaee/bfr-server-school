@@ -1,18 +1,25 @@
 # Home page
 ### NoDocs ###
-GET     /                                           controllers.Assets.at(path="/public", file="index.html")
+GET         /                                                      controllers.Assets.at(path="/public", file="index.html")
 ### NoDocs ###
-GET     /static/*file                               controllers.Assets.at(path="/public/static", file)
+GET         /static/*file                                          controllers.Assets.at(path="/public/static", file)
 
-POST     /bfr/v1/attendance-entry   controllers.AttendanceEntry.entry
+POST        /bfr/v1/attendance-entry                               controllers.LogEntry.logEntry
 
 # Dashboard
-GET      /bfr/v1/dashboard     controllers.Dashboard.data
+GET         /bfr/v1/dashboard                                      controllers.Dashboard.data
 
 # Attendance Monitoring Report
-GET      /bfr/v1/amr/:schoolcode           controllers.AmrController.getAMR(schoolcode)
-GET      /amr/dropdown           controllers.AmrController.getAMRDropDown
+GET         /bfr/v1/amr/:schoolcode                                controllers.AmrController.getAMR(schoolcode)
+GET         /amr/dropdown                                          controllers.AmrController.getAMRDropDown
+GET         /bfr/amr/student-image/:schoolcode/:studentcode        controllers.AmrController.studentImage(schoolcode, studentcode)
 
+# Take Home Ration
+GET         /bfr/thr/log/:schoolcode                               controllers.THRController.getTHR(schoolcode)
+GET         /bfr/thr/dropdown                                      controllers.THRController.getTHRDropDown()
+GET         /bfr/thr/student-image/:schoolcode/:studentcode        controllers.THRController.studentImage(schoolcode, studentcode)
 
+#Master data
 #Registration
-POST   /bfr/v1/registration        controllers.RegistrationController.submitRegistration
+POST        /bfr/v1/registration                                   controllers.RegistrationController.submitRegistration
+# GET         /bfr/:schoolcode/                                      controllers.RegistrationController.listMetadata(schoolcode: String, timestamp: Option[String] ?= None )

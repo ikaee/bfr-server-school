@@ -7,6 +7,7 @@ import Admin from "../../src/components/Admin";
 import {Tab} from "pui-react-tabs";
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import THR from "../../src/components/THR";
 
 
 describe('NavMenu component', () => {
@@ -22,7 +23,8 @@ describe('NavMenu component', () => {
         const tabs = navMenu.props().children.props.children
         expect(tabs[0].props.title).toEqual("Dashboard")
         expect(tabs[1].props.title).toEqual("AMR")
-        expect(tabs[2].props.title).toEqual("Admin")
+        expect(tabs[2].props.title).toEqual("THR")
+        expect(tabs[3].props.title).toEqual("Admin")
     });
 
     it('render Dashboard tab by default', () => {
@@ -38,6 +40,9 @@ describe('NavMenu component', () => {
 
     it('has AMR tab', () => {
         expect(navMenu).toContainReact(<AMR/>)
+    });
+    it('has THR tab', () => {
+        expect(navMenu).toContainReact(<THR/>)
     });
 
     it('has Admin tab', () => {

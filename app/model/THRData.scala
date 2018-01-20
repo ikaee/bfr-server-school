@@ -3,34 +3,28 @@ package model
 import dao.DocumentDB
 import play.api.libs.json.{Json, Writes}
 
-/**
-  * Created by kirankumarbs on 8/6/17.
-  */
-
-case class AMRData(schoolCode: String,
+case class THRData(schoolCode: String,
                    studentcode: String,
                    name: String,
                    surname: String,
                    gender: String,
                    dob: String,
-                   attendance: String)
+                   thr: String)
 
-object AMRData {
-  def apply(schoolCode: String): List[AMRData] = {
-    DocumentDB.getAMR(schoolCode)
+object THRData {
+  def apply(schoolCode: String): List[THRData] = {
+    DocumentDB.getTHR(schoolCode)
   }
 
-  implicit val amrDataWriter: Writes[AMRData] = new Writes[AMRData] {
-    override def writes(a: AMRData) = Json.obj(
+  implicit val thrDataWriter: Writes[THRData] = new Writes[THRData] {
+    override def writes(a: THRData) = Json.obj(
       "schoolcode" -> a.schoolCode,
       "studentcode" -> a.studentcode,
       "name" -> a.name,
       "surname" -> a.surname,
       "gender" -> a.gender,
       "dob" -> a.dob,
-      "attendance" -> a.attendance
+      "thr" -> a.thr
     )
   }
 }
-
-

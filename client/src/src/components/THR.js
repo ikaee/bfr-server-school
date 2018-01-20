@@ -5,8 +5,8 @@ import axios from 'axios';
 import {css, StyleSheet} from "aphrodite";
 import ReactTable from 'react-table'
 import "react-table/react-table.css";
-import {Option} from "../utils/Option";
-import Loader from "react-loader";
+import {Option} from "../utils/Option"
+import Loader from "react-loader"
 
 export const reportTableColumns = [
     {
@@ -25,14 +25,14 @@ export const reportTableColumns = [
         Header: 'Dob',
         accessor: 'dob'
     }, {
-        Header: 'Attendance',
-        accessor: 'attendance'
+        Header: 'THR',
+        accessor: 'thr'
     }, {
         Header: 'Image',
         accessor: 'image'
     }]
 
-class AMR extends Component {
+export default class THR extends Component {
 
     constructor() {
         super();
@@ -54,18 +54,14 @@ class AMR extends Component {
     isSameCode = (r, record) => r.studentcode === record.studentcode
 
     addImage = record => {
-        this.setState({loaded: false});
         const MIME = "data:image/jpeg;base64,";
-        axios.get(`/bfr/amr/student-image/${record.schoolcode}/${record.studentcode}`).then(res => {
+        axios.get(`/bfr/thr/student-image/${record.schoolcode}/${record.studentcode}`).then(res => {
             const image = <img src={MIME + res.data} style={{"height": "40px", "width": "40px"}}/>;
             const newRecord = Object.assign({}, record, {"image": image})
 
             this.setState(prevState => ({
-                reportData: prevState.reportData.map(r => this.isSameCode(r, record) ? newRecord : r),
-                loaded: true
+                reportData: prevState.reportData.map(r => this.isSameCode(r, record) ? newRecord : r)
             }))
-        }).catch(err => {
-            this.setState({loaded: true})
         })
     }
 
@@ -75,7 +71,7 @@ class AMR extends Component {
         Option(selectedOption).fold(
             _ => this.setState({selectedOption: '', reportData: [], loaded: true}),
             _ => {
-                axios.get(`/bfr/v1/amr/${selectedOption.value}`).then(res => {
+                axios.get(`/bfr/thr/log/${selectedOption.value}`).then(res => {
                     this.setState({
                         selectedOption,
                         reportData: res.data.data.map(this.addImageLink),
@@ -115,7 +111,8 @@ class AMR extends Component {
     }
 
     componentDidMount = () => {
-        axios.get('/amr/dropdown').then(({data}) => {
+        axios.get('/bfr/thr/dropdown').then(({data}) => {
+            console.log("sdsd", data);
             this.setState({
                 options: data,
                 loaded: true
@@ -126,5 +123,3 @@ class AMR extends Component {
     }
 
 }
-
-export default AMR;

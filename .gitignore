@@ -7,3 +7,5 @@ target
 /.settings
 /RUNNING_PID
 
+src/src/images/item.bmp
+src/tests/components/__snapshots__/

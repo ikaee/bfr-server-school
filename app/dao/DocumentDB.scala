@@ -3,11 +3,9 @@ package dao
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-import com.google.gson.Gson
 import com.microsoft.azure.documentdb.{Document, DocumentClient}
-import controllers.Registration
 import dao.DBConfigFactory._
-import model.AMRData
+import model.{AMRData, Registration, THRData}
 import play.api.libs.json._
 
 import scala.collection.JavaConverters._
@@ -17,26 +15,64 @@ import scala.collection.JavaConverters._
   * Created by kirankumarbs on 4/6/17.
   */
 object DocumentDB {
-  def getAMR(schoolCode: String) = {
-    val master = queryDatabase(client, "SELECT * FROM coll where coll.doctype = \"registration\" and coll.schoolcode = \""+schoolCode+"\"").toList match {
-      case Nil => Nil
-      case xs => xs
+  def studentImage(schoolCode: String, studentCode: String): String = {
+    val imageData = queryDatabase(client, "SELECT * FROM coll where coll.doctype = \"image\" and coll.schoolcode = \"" + schoolCode + "\" and coll.studentcode = \"" + studentCode + "\"").toList match {
+      case Nil => ""
+      case xs => xs.head.get("image").toString
     }
-    println("Master Data is ===>"+ master)
+    imageData
+  }
 
-    val present = queryDatabase(client, "SELECT * FROM coll where coll.doctype = \"attendance\" and coll.schoolcode = \""+schoolCode+"\"").toList match {
+  def getTHR(schoolCode: String) = {
+    val master = queryDatabase(client, "SELECT * FROM coll where coll.doctype = \"registration\" and coll.schoolcode = \"" + schoolCode + "\"").toList match {
       case Nil => Nil
       case xs => xs
     }
-    println("Present Data is ===>"+ present)
+    println("Master Data is ===>" + master)
+
+    val present = queryDatabase(client, "SELECT * FROM coll where coll.doctype = \"thr\" and coll.schoolcode = \"" + schoolCode + "\"").toList match {
+      case Nil => Nil
+      case xs => xs
+    }
+    println("Present Data is ===>" + present)
 
     implicit def convert(o: Object): String = o.toString()
 
 
-    var amrs = present.map(p => master.find(m => m.get("studentcode") == p.get("studentcode")) match {
+    val thrs = present.map(p => master.find(m => m.get("studentcode") == p.get("studentcode")) match {
       case None => None
       case Some(m) =>
-        Some(AMRData(m.get("studentcode"), m.get("name"),m.get("surname"), m.get("gender"), m.get("dob"), p.get("datestamp"), p.get("image")))
+        Some(THRData(m.get("schoolcode"),m.get("studentcode"), m.get("name"), m.get("surname"), m.get("gender"), m.get("dob"), p.get("datestamp")))
+    })
+
+    thrs match {
+      case Nil => Nil
+      case xs => xs.filter(_.isDefined).map(_.get)
+    }
+
+  }
+
+
+  def getAMR(schoolCode: String) = {
+    val master = queryDatabase(client, "SELECT * FROM coll where coll.doctype = \"registration\" and coll.schoolcode = \"" + schoolCode + "\"").toList match {
+      case Nil => Nil
+      case xs => xs
+    }
+    println("Master Data is ===>" + master)
+
+    val present = queryDatabase(client, "SELECT * FROM coll where coll.doctype = \"attendance\" and coll.schoolcode = \"" + schoolCode + "\"").toList match {
+      case Nil => Nil
+      case xs => xs
+    }
+    println("Present Data is ===>" + present)
+
+    implicit def convert(o: Object): String = o.toString()
+
+
+    val amrs = present.map(p => master.find(m => m.get("studentcode") == p.get("studentcode")) match {
+      case None => None
+      case Some(m) =>
+        Some(AMRData(m.get("schoolcode"),m.get("studentcode"), m.get("name"), m.get("surname"), m.get("gender"), m.get("dob"), p.get("datestamp")))
     })
 
     amrs match {
@@ -49,18 +85,17 @@ object DocumentDB {
   type DashboardData = Either[List[String], Map[String, String]]
   val client = DBConfigFactory.documentClient
 
-  def dashboardData(filters: Option[Map[String, String]]): DashboardData =
-    {
-      val master: List[Document] = totalRegistrations
-      val present: List[Document] = totalPresented
-      val attendanceWiseData: Map[String, String] = attendancData(master.length, present.length)
-      val genderWiseData: Map[String, String] = genderData(master, present)
-      val monthWiseData: Map[String, String] = monthData(present)
-      val ageWiseData: Map[String, String] = ageData(present, master)
+  def dashboardData(filters: Option[Map[String, String]]): DashboardData = {
+    val master: List[Document] = totalRegistrations
+    val present: List[Document] = totalPresented
+    val attendanceWiseData: Map[String, String] = attendancData(master.length, present.length)
+    val genderWiseData: Map[String, String] = genderData(master, present)
+    val monthWiseData: Map[String, String] = monthData(present)
+    val ageWiseData: Map[String, String] = ageData(present, master)
 
-      Right(attendanceWiseData ++ genderWiseData ++ monthWiseData ++ ageWiseData)
+    Right(attendanceWiseData ++ genderWiseData ++ monthWiseData ++ ageWiseData)
 
-    }
+  }
 
   def monthData(present: List[Document]) = {
     present.groupBy(d => d.get("datestamp").toString.split("-")(1)).map(m => (m._1, m._2.size.toString))
@@ -111,10 +146,10 @@ object DocumentDB {
       val year = Math.abs(ChronoUnit.YEARS.between(start, end))
 
       year match {
-        case y if(y >5 && y<9) => "6-8"
-        case y if(y >8 && y<12) => "9-11"
-        case y if(y >12 && y<14) => "12-13"
-        case y if(y >14 ) => "14+"
+        case y if (y > 5 && y < 9) => "6-8"
+        case y if (y > 8 && y < 12) => "9-11"
+        case y if (y > 12 && y < 14) => "12-13"
+        case y if (y > 14) => "14+"
         case _ => ""
 
       }
@@ -132,18 +167,18 @@ object DocumentDB {
       .getQueryIterable.asScala
   }
 
-  def insertFormRegistration(registration: Registration) = {
-    val json = new Gson().toJson(registration)
+
+  def insertIntoDB(data: JsValue): String = {
     val client = DBConfigFactory.documentClient
     client.createDocument(s"dbs/$databaseId/colls/$collectionId",
-      new Document(json), null,false)
+      new Document(data.toString()), null, false)
     "record is inserted"
   }
 
   def insertAttendanceEntry(data: JsValue): String = {
     val client = DBConfigFactory.documentClient
     client.createDocument(s"dbs/$databaseId/colls/$collectionId",
-      new Document(data.toString()), null,false)
+      new Document(data.toString()), null, false)
     "record is inserted"
   }
 

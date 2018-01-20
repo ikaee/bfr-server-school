@@ -2,20 +2,17 @@ package controllers
 
 
 import dao.DocumentDB
-import model.AMRData
+import model.THRData
 import play.api.libs.json.{JsValue, Json, Writes}
 import play.api.mvc.{Action, Controller}
 
-/**
-  * Created by kirankumarbs on 7/6/17.
-  */
-class AmrController extends Controller {
+class THRController extends Controller {
 
-  def getAMR(schoolCode: String) = Action {
-    Ok(Json.toJson(AMRData(schoolCode)))
+  def getTHR(schoolCode: String) = Action {
+    Ok(Json.toJson(THRData(schoolCode)))
   }
 
-  def getAMRDropDown() = Action {
+  def getTHRDropDown() = Action {
     Ok(
       Json.arr(
         Json.obj("value" -> "27511010507", "label" -> "PIMPALGAO 2"),
@@ -36,11 +33,10 @@ class AmrController extends Controller {
     Ok(DocumentDB.studentImage(schoolCode, studentCode))
   }
 
-  implicit val amrWrite = new Writes[List[AMRData]] {
-    override def writes(o: List[AMRData]): JsValue = Json.obj(
+  implicit val thrWrite = new Writes[List[THRData]] {
+    override def writes(o: List[THRData]): JsValue = Json.obj(
       "data" -> o
     )
   }
-
 
 }
