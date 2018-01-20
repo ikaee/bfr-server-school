@@ -7,6 +7,9 @@ import ReactTable from 'react-table'
 import "react-table/react-table.css";
 import {Option} from "../utils/Option";
 import Loader from "react-loader";
+import DatePicker from "react-datepicker";
+import 'react-datepicker/dist/react-datepicker.css';
+import moment from 'moment'
 
 export const reportTableColumns = [
     {
@@ -40,8 +43,14 @@ class AMR extends Component {
             selectedOption: '',
             options: [],
             reportData: [],
-            loaded: false
+            loaded: false,
+            startDate: moment()
         }
+    }
+
+    handleDateChange = date => {
+        this.setState({startDate: date})
+        console.log("date ===", date.format("DD-MM-YYYY"))
     }
 
 
@@ -94,13 +103,18 @@ class AMR extends Component {
         let selectedOption = this.state.selectedOption;
         const value = selectedOption && selectedOption.value;
         return (
-            <section class="wrapper state-overview">
+            <section className="wrapper state-overview">
                 <Loader loaded={this.state.loaded} top="50%" left="55%">
                     <Select
                         style={{width: "95%"}}
                         value={value}
                         onChange={this.onHandleChange}
                         options={options}
+                    />
+                    <DatePicker
+                        dateFormat="DD-MM-YYYY"
+                        selected={this.state.startDate}
+                        onChange={this.handleDateChange}
                     />
                     <ReactTable
                         style={{width: "95%", marginTop: "2%"}}

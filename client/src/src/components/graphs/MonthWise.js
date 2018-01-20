@@ -3,29 +3,32 @@ import GraphTitle from "../GraphTitle";
 import {Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis} from 'recharts';
 
 
-const MonthWise = ({title ='Month wise', data=[
-    {name: 'Jan', attendance: 900},
-    {name: 'Feb', attendance: 500},
-    {name: 'Mar', attendance: 700},
-    {name: 'Apr', attendance: 300},
-    {name: 'May', attendance: 450},
-    {name: 'Jun', attendance: 500},
-    {name: 'Jul', attendance: 100},
-    {name: 'Aug', attendance: 400},
-    {name: 'Sep', attendance: 600},
-    {name: 'Oct', attendance: 700},
-    {name: 'Nov', attendance: 450},
-    {name: 'Dec', attendance: 200}] }) => (
+const MonthWise = ({
+                       title = 'Month wise',
+                       data = [
+                           {name: 'Jan', value: 0},
+                           {name: 'Feb', value: 0},
+                           {name: 'Mar', value: 0},
+                           {name: 'Apr', value: 0},
+                           {name: 'May', value: 0},
+                           {name: 'Jun', value: 0},
+                           {name: 'Jul', value: 0},
+                           {name: 'Aug', value: 0},
+                           {name: 'Sep', value: 0},
+                           {name: 'Oct', value: 0},
+                           {name: 'Nov', value: 0},
+                           {name: 'Dec', value: 0}]
+                   }) => (
 
-    <div class="col-lg-10 col-sm-6" style={{backgroundColor: "white", width: "850px", borderRadius:'7px'}}>
+    <div className="col-lg-10 col-sm-6" style={{backgroundColor: "white", width: "850px", borderRadius: '7px'}}>
         <GraphTitle title={title}/>
-        <BarChart width={800} height={500} data={data} >
+        <BarChart width={800} height={500} data={data}>
             <XAxis dataKey="name"/>
-            <YAxis />
+            <YAxis/>
             <CartesianGrid strokeDasharray="3 3"/>
             <Tooltip/>
-            <Legend />
-            <Bar dataKey="attendance" fill="#8884d8" />
+            <Legend/>
+            <Bar dataKey="value" fill="#8884d8"/>
         </BarChart>
     </div>);
 

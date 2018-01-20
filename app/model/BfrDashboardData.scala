@@ -12,10 +12,10 @@ import play.api.libs.json.{JsValue, Json, Writes}
 case class BfrDashboardData(attendanceData: AttendanceData,
                             genderData: List[GenderData],
                             ageData: List[AgeData],
-                            monthData: MonthData)
+                            monthData: List[MonthData])
 
-object BfrDashboardData{
-  def apply(filters: Option[Map[String, String]]=None): Either[List[String],BfrDashboardData] ={
+object BfrDashboardData {
+  def apply(filters: Option[Map[String, String]] = None): Either[List[String], BfrDashboardData] = {
     DocumentDB.dashboardData(filters) match {
       case Left(l) => Left(l)
       case Right(r) => Right(createBfrDashboardData(r))
@@ -29,40 +29,41 @@ object BfrDashboardData{
     * Converting from Entity to Json while service returning response
     */
   implicit val bfrDashboardDataWrites = new Writes[BfrDashboardData] {
-    override def writes(epgmDD: BfrDashboardData): JsValue = {
+    override def writes(bfrDD: BfrDashboardData): JsValue = {
       Json.obj(
-        "attendance_data"  -> AttendanceData(epgmDD.attendanceData),
-        "gender_data"  -> GenderData(epgmDD.genderData),
-        "age_data"  -> AgeData(epgmDD.ageData),
-        "month_data"  -> MonthData(epgmDD.monthData)
+        "attendance_data" -> AttendanceData(bfrDD.attendanceData),
+        "gender_data" -> GenderData(bfrDD.genderData),
+        "age_data" -> AgeData(bfrDD.ageData),
+        "month_data" -> MonthData(bfrDD.monthData)
       )
     }
   }
 }
 
 
-case class AgeData(value: Int, color: String)
+case class AgeData(name: String, value: Int)
 
 object AgeData {
-  def apply(ad: Map[String, String]): List[AgeData] =
-  {
-    AgeData(ad.get("6-8").getOrElse("0").toInt,  "#a1887f") ::
-      AgeData(ad.get("9-11").getOrElse("0").toInt,   "#bb8fce") ::
-      AgeData(ad.get("12-13").getOrElse("0").toInt, "#ccd1d1") ::
-      AgeData(ad.get("14+").getOrElse("0").toInt,"#f7dc6f") :: Nil
+  def apply(ad: Map[String, String]): List[AgeData] = {
+    AgeData("6Y-8Y", ad.get("6-8").getOrElse("0").toInt) ::
+      AgeData("9Y-11Y", ad.get("9-11").getOrElse("0").toInt) ::
+      AgeData("12Y-13Y", ad.get("12-13").getOrElse("0").toInt) ::
+      AgeData("14Y+", ad.get("14+").getOrElse("0").toInt) :: Nil
   }
-  def apply(ads: List[AgeData]) = ads.map(ad => Json.obj("value" -> ad.value, "color" -> ad.color))
+
+  def apply(ads: List[AgeData]) = ads.map(ad => Json.obj("name" -> ad.name, "value" -> ad.value))
 }
 
 
-case class GenderData(value: Int, color: String)
+case class GenderData(value: String, color: String)
 
 object GenderData {
   def apply(gd: Map[String, String]): List[GenderData] = {
-    val male = gd.get("m").getOrElse("0").toInt
-    val female = gd.get("f").getOrElse("0").toInt
-    GenderData(male, "#ccd1d1") :: GenderData(female, "#566573") :: Nil
+    val male = gd.get("m").getOrElse("0")
+    val female = gd.get("f").getOrElse("0")
+    GenderData(male, "#ff6c60") :: GenderData(female, "#6ccac9") :: Nil
   }
+
   def apply(gds: List[GenderData]) = gds.map(gd => Json.obj("value" -> gd.value, "color" -> gd.color))
 }
 
@@ -72,23 +73,23 @@ object AttendanceData {
   def apply(gd: Map[String, String]): AttendanceData = {
 
     AttendanceData(gd.get("total").getOrElse("0").toInt
-      ,gd.get("present").getOrElse("0").toInt
-      ,gd.get("percentage").getOrElse("0").toInt
+      , gd.get("present").getOrElse("0").toInt
+      , gd.get("percentage").getOrElse("0").toInt
     )
   }
+
   def apply(gd: AttendanceData) =
-    Json.obj("total"  -> gd.total, "present"  -> gd.present, "percentage"  -> gd.percentage)
+    Json.obj("total" -> gd.total, "present" -> gd.present, "percentage" -> gd.percentage)
 }
 
 
+case class MonthData(name: String, value: Int)
 
-case class MonthData(labels: List[String], datasets: List[Datasets])
-object MonthData{
-  def apply(md: Map[String, String]): MonthData =
-  {
+object MonthData {
+  def apply(md: Map[String, String]): List[MonthData] = {
 
-    val mConst = Map("01" -> "Jan","02" -> "Feb","03" -> "Mar","04" -> "Apr","05" -> "May","06" -> "Jun","07" -> "Jul","08" -> "Aug","09" -> "Sep","10" -> "Oct",
-      "11" -> "Nov","12" -> "Dec")
+    val mConst = Map("01" -> "Jan", "02" -> "Feb", "03" -> "Mar", "04" -> "Apr", "05" -> "May", "06" -> "Jun", "07" -> "Jul", "08" -> "Aug", "09" -> "Sep", "10" -> "Oct",
+      "11" -> "Nov", "12" -> "Dec")
     val now = Calendar.getInstance().getTime()
     val monthFormat = new SimpleDateFormat("MM")
     val currDt = monthFormat.format(now)
@@ -101,26 +102,25 @@ object MonthData{
 
     def prepareMonthData(raw: List[(String, String)]): List[(String, String)] = {
       def loop(raw: List[(String, String)], acc: List[(String, String)]): List[(String, String)] = raw match {
-        case (x, o)::xs if(x == currDt)      =>  {xs ++ acc ++ List((currDt, o))}
-        case x::xs                =>  {loop(xs, acc ++ List(x))}
+        case (x, o) :: xs if (x == currDt) => {
+          xs ++ acc ++ List((currDt, o))
+        }
+        case x :: xs => {
+          loop(xs, acc ++ List(x))
+        }
       }
-      loop(raw,List[(String, String)]())
+
+      loop(raw, List[(String, String)]())
     }
 
-    val combinedData = prepareMonthData(mDataRaw).unzip
+    val combinedData: List[(String, String)] = prepareMonthData(mDataRaw)
 
-    MonthData(combinedData._1.map(x => mConst.get(x).get),
-      Datasets("rgba(151,187,205,0.5)", "rgba(151,187,205,1)", combinedData._2.map(_.toInt)) :: Nil)
+    combinedData.map(d => MonthData(mConst.get(d._1).get, d._2.toInt))
   }
 
-  def apply(md: MonthData) =
-    Json.obj(
-      "labels" -> md.labels,
-      "datasets" -> Datasets(md.datasets))
-}
-case class Datasets(fillColor: String, strokeColor: String, data: List[Int])
-object Datasets{
-  def apply(ds: List[Datasets]) =
-    ds.map(d => Json.obj("fillColor" -> d.fillColor, "strokeColor" -> d.strokeColor, "data" -> d.data))
+  def apply(md: List[MonthData]) =
+    md.map(m => Json.obj(
+      "name" -> m.name,
+      "value" -> m.value))
 }
 

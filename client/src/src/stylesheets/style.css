@@ -4740,7 +4740,7 @@ tr.odd.gradeX td.sorting_1, tr.even.gradeX td.sorting_1, table.display tr.even.g
     color: #fff;
     padding: 10px 0;
     position: absolute;
-    bottom: 0;
+    bottom: 0%;
     margin-left: 210px;
 }
 

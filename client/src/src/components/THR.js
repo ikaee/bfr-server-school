@@ -113,7 +113,6 @@ export default class THR extends Component {
 
     componentDidMount = () => {
         axios.get('/bfr/thr/dropdown').then(({data}) => {
-            console.log("sdsd", data);
             this.setState({
                 options: data,
                 loaded: true

@@ -1,18 +1,44 @@
-import React from "react";
+import React, {Component} from "react";
 import GenderWise from "./graphs/GenderWise";
 import MonthWise from "./graphs/MonthWise";
 import AgeWise from "./graphs/AgeWise";
 import MetricsDashboard from './MetricsDashboard';
+import axios from 'axios';
 
-const Dashboard = () =>
-    <section class="wrapper">
-        <div>
-            <MetricsDashboard present={10} total={20} percentage={50}/>
-            <MonthWise/>
-            <GenderWise/>
-            <AgeWise/>
-        </div>
-    </section>;
+
+class Dashboard extends Component {
+    constructor() {
+        super();
+        this.state = {
+            data: {}
+        }
+    }
+
+    componentDidMount() {
+        axios.get("/bfr/v1/dashboard")
+            .then(({data}) => {
+                this.setState({data})
+            })
+            .catch(err => {
+
+            })
+    }
+
+    render() {
+        const {age_data, attendance_data, gender_data, month_data} = this.state.data;
+        return (
+            <section className="wrapper">
+                <div>
+                    <MetricsDashboard {...attendance_data}/>
+                    <MonthWise title ='Month wise' data={month_data}/>
+                    <GenderWise title = 'Gender Wise' data = {gender_data}/>
+                    <AgeWise title = {"Age wise"} data={age_data}/>
+                </div>
+            </section>
+        )
+    }
+}
+
 const data = [
     {
         value: 40,
