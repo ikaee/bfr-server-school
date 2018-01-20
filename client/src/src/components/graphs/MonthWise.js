@@ -17,10 +17,9 @@ const MonthWise = ({title ='Month wise', data=[
     {name: 'Nov', attendance: 450},
     {name: 'Dec', attendance: 200}] }) => (
 
-    <div>
+    <div class="col-lg-10 col-sm-6" style={{backgroundColor: "white", width: "850px", borderRadius:'7px'}}>
         <GraphTitle title={title}/>
-        <BarChart width={600} height={300} data={data}
-                  margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+        <BarChart width={800} height={500} data={data} >
             <XAxis dataKey="name"/>
             <YAxis />
             <CartesianGrid strokeDasharray="3 3"/>

@@ -47,7 +47,7 @@ class AMR extends Component {
 
     addImageLink = record => {
         return Object.assign({}, record, {
-            image: <a onClick={_ => this.addImage(record)}>View Image</a>
+            image: <a style={{cursor: "pointer"}} onClick={_ => this.addImage(record)}>View Image</a>
         })
     };
 
@@ -94,15 +94,16 @@ class AMR extends Component {
         let selectedOption = this.state.selectedOption;
         const value = selectedOption && selectedOption.value;
         return (
-            <div>
-                <Loader loaded={this.state.loaded} top="300px" left="100%">
+            <section class="wrapper state-overview">
+                <Loader loaded={this.state.loaded} top="50%" left="55%">
                     <Select
+                        style={{width: "95%"}}
                         value={value}
                         onChange={this.onHandleChange}
                         options={options}
                     />
                     <ReactTable
-                        style={{width: "900px", marginTop: "20px"}}
+                        style={{width: "95%", marginTop: "2%"}}
                         data={this.state.reportData}
                         columns={reportTableColumns}
                         filterable
@@ -110,7 +111,7 @@ class AMR extends Component {
                         className="-striped -highlight"
                     />
                 </Loader>
-            </div>
+            </section>
         )
     }
 

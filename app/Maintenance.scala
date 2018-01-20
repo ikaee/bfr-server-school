@@ -35,7 +35,22 @@ object removeAllRegistration extends App{
 
   val documents = documentClient.queryDocuments(
     "dbs/" + databaseId + "/colls/" + collectionId,
-    "SELECT * FROM tyrion where tyrion.studentcode=\"abhy\" and tyrion.doctype=\"registration\" ",
+    "SELECT * FROM tyrion where  tyrion.doctype=\"registration\" ",
+    null).getQueryIterable().asScala.toList
+
+  println(documents)
+
+  documents.foreach(d => {
+    documentClient.deleteDocument(d.getSelfLink(), null)
+  })
+
+}
+
+object removeAllImage extends App{
+
+  val documents = documentClient.queryDocuments(
+    "dbs/" + databaseId + "/colls/" + collectionId,
+    "SELECT * FROM tyrion where  tyrion.doctype=\"image\" ",
     null).getQueryIterable().asScala.toList
 
   println(documents)

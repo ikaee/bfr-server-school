@@ -1,11 +1,14 @@
 package dao
 
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import java.util.TimeZone
 
 import com.microsoft.azure.documentdb.{Document, DocumentClient}
 import dao.DBConfigFactory._
-import model.{AMRData, Registration, THRData}
+import model.{AMRData, THRData}
+import org.joda.time.DateTime
 import play.api.libs.json._
 
 import scala.collection.JavaConverters._
@@ -42,7 +45,7 @@ object DocumentDB {
     val thrs = present.map(p => master.find(m => m.get("studentcode") == p.get("studentcode")) match {
       case None => None
       case Some(m) =>
-        Some(THRData(m.get("schoolcode"),m.get("studentcode"), m.get("name"), m.get("surname"), m.get("gender"), m.get("dob"), p.get("datestamp")))
+        Some(THRData(m.get("schoolcode"), m.get("studentcode"), m.get("name"), m.get("surname"), m.get("gender"), m.get("dob"), p.get("datestamp")))
     })
 
     thrs match {
@@ -72,7 +75,7 @@ object DocumentDB {
     val amrs = present.map(p => master.find(m => m.get("studentcode") == p.get("studentcode")) match {
       case None => None
       case Some(m) =>
-        Some(AMRData(m.get("schoolcode"),m.get("studentcode"), m.get("name"), m.get("surname"), m.get("gender"), m.get("dob"), p.get("datestamp")))
+        Some(AMRData(m.get("schoolcode"), m.get("studentcode"), m.get("name"), m.get("surname"), m.get("gender"), m.get("dob"), p.get("datestamp")))
     })
 
     amrs match {
@@ -83,6 +86,7 @@ object DocumentDB {
   }
 
   type DashboardData = Either[List[String], Map[String, String]]
+
   val client = DBConfigFactory.documentClient
 
   def dashboardData(filters: Option[Map[String, String]]): DashboardData = {
@@ -109,8 +113,8 @@ object DocumentDB {
   }
 
   private def totalPresented = {
-
-    val query = "SELECT * FROM coll where coll.doctype = \"attendance\""
+    val currentDate = "14-01-2018";
+    val query = s"SELECT * FROM coll where coll.doctype = \"attendance\" and coll.datestamp = \" $currentDate \""
     queryDatabase(client, query).toList match {
       case Nil => Nil
       case xs => xs
@@ -129,7 +133,11 @@ object DocumentDB {
   }
 
   private def attendancData(total: Int, present: Int) = {
-    val percentage = (present * 100) / total
+
+    val percentage = total match {
+      case 0 => 0
+      case total => (present * 100) / total
+    }
 
     Map("total" -> s"$total", "present" -> s"$present", "percentage" -> s"$percentage")
   }

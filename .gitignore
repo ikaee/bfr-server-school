@@ -9,3 +9,4 @@ target
 
 src/src/images/item.bmp
 src/tests/components/__snapshots__/
+client/package-lock.json
