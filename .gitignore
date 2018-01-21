@@ -10,3 +10,7 @@ target
 src/src/images/item.bmp
 src/tests/components/__snapshots__/
 client/package-lock.json
+app/views/index.scala.html
+public/*
+
+

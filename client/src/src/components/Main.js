@@ -9,6 +9,7 @@ import THR from "./THR";
 import NavMenu from "./NavMenu";
 import Header from "./Header";
 import Footer from "./Footer";
+import Admin from "./Admin";
 
 export default () =>
     <Router>
@@ -21,7 +22,7 @@ export default () =>
                 <Route exact path="/" component={Dashboard}/>
                 <Route path="/amr" component={AMR}/>
                 <Route path="/thr" component={THR}/>
-                <Route path="/admin" component={() => <div/>}/>
+                <Route path="/admin" component={Admin}/>
             </section>
             <Footer />
         </section>
