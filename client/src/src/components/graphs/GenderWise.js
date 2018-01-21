@@ -8,8 +8,8 @@ const GenderWise = ({title = 'Gender Wise', data = [{value: 0, color: "#6ccac9"}
         <div><GraphTitle title={title}/></div>
         <Doughnut data={data} width="275" height="180" style={{float: "left"}}/>
         <div>
-            <label  style={{color: "#ff6c60", top: "10px", marginLeft: "13%"}}>Female {data[1].value}%</label>
-            <label  style={{color: "#6ccac9", top: "10px", marginLeft: "15%"}}>Male {data[0].value}%</label>
+            <label  style={{color: "#ff6c60", top: "10px", marginLeft: "24%"}}>Female </label>
+            <label  style={{color: "#6ccac9", top: "10px", marginLeft: "15%"}}>Male </label>
         </div>
     </div>);
 
