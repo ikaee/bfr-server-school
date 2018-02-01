@@ -10,6 +10,7 @@ import NavMenu from "./NavMenu";
 import Header from "./Header";
 import Footer from "./Footer";
 import Admin from "./Admin";
+import HotCooked from "./HotCooked";
 
 export default () =>
     <Router>
@@ -22,9 +23,10 @@ export default () =>
                 <Route exact path="/" component={Dashboard}/>
                 <Route path="/amr" component={AMR}/>
                 <Route path="/thr" component={THR}/>
+                <Route path="/hot-cooked" component={HotCooked}/>
                 <Route path="/admin" component={Admin}/>
             </section>
-            <Footer />
+            {/*<Footer />*/}
         </section>
     </Router>
 

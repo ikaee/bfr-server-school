@@ -36,7 +36,13 @@ export default class NavMenu extends Component {
                             </Link>
                         </li>
                         <li>
-                            <Link className={this.activeClass(4)} onClick={() => this.activeKey(4)} to={"/admin"}>
+                            <Link className={this.activeClass(4)} onClick={() => this.activeKey(4)} to={"/hot-cooked"}>
+                                <i className="fa fa-table"></i>
+                                <span>Hot Cooked</span>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link className={this.activeClass(5)} onClick={() => this.activeKey(5)} to={"/admin"}>
                                 <i className="fa fa-user-circle"></i>
                                 <span>Admin</span>
                             </Link>

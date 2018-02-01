@@ -7,7 +7,7 @@ import java.util.{Date, TimeZone}
 
 import com.microsoft.azure.documentdb.{Document, DocumentClient}
 import dao.DBConfigFactory._
-import model.{AMRData, THRData}
+import model.{AMRData, HotCookedData, THRData}
 import play.api.libs.json._
 
 import scala.collection.JavaConverters._
@@ -89,13 +89,43 @@ object DocumentDB {
 
   }
 
+  def getHotCooked(schoolCode: String) = {
+    val currentDate: String = simpleDateFormat.format(new Date())
+    val master = queryDatabase(client, "SELECT * FROM coll where coll.doctype = \"registration\" and coll.schoolcode = \"" + schoolCode + "\"").toList match {
+      case Nil => Nil
+      case xs => xs
+    }
+    println("Master Data is ===>" + master)
+
+    val present = queryDatabase(client, "SELECT * FROM coll where coll.doctype = \"hot-cooked\" and coll.schoolcode = \"" + schoolCode + "\" and coll.datestamp = \"" + currentDate + "\"").toList match {
+      case Nil => Nil
+      case xs => xs
+    }
+    println("Present Data is ===>" + present)
+
+    implicit def convert(o: Object): String = o.toString()
+
+
+    val hotCooked = present.map(p => master.find(m => m.get("studentcode") == p.get("studentcode")) match {
+      case None => None
+      case Some(m) =>
+        Some(HotCookedData(m.get("schoolcode"), m.get("studentcode"), m.get("name"), m.get("surname"), m.get("gender"), m.get("dob"), p.get("datestamp")))
+    })
+
+    hotCooked match {
+      case Nil => Nil
+      case xs => xs.filter(_.isDefined).map(_.get)
+    }
+
+  }
+
   type DashboardData = Either[List[String], Map[String, String]]
 
   val client = DBConfigFactory.documentClient
 
-  def dashboardData(filters: Option[Map[String, String]]): DashboardData = {
+  def dashboardData(filters: Option[Map[String, String]],dashboardType:String): DashboardData = {
     val master: List[Document] = totalRegistrations
-    val present: List[Document] = totalPresented
+    val present: List[Document] = totalPresented(dashboardType)
     val attendanceWiseData: Map[String, String] = attendancData(master.length, present.length)
     val genderWiseData: Map[String, String] = genderData(master, present)
     val monthWiseData: Map[String, String] = monthData(present)
@@ -118,9 +148,9 @@ object DocumentDB {
 
   }
 
-  private def totalPresented = {
+  private def totalPresented(dashboardType:String) = {
     val currentDate: String = simpleDateFormat.format(new Date())
-    val query = "SELECT * FROM coll where coll.doctype = \"attendance\" and coll.datestamp = \"" + currentDate + "\"";
+    val query = "SELECT * FROM coll where coll.doctype = \""+dashboardType+"\" and coll.datestamp = \"" + currentDate + "\"";
     queryDatabase(client, query).toList match {
       case Nil => Nil
       case xs => xs

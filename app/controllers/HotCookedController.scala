@@ -1,18 +1,18 @@
 package controllers
 
-
 import dao.DocumentDB
-import model.THRData
+import model.HotCookedData
 import play.api.libs.json.{JsValue, Json, Writes}
 import play.api.mvc.{Action, Controller}
 
-class THRController extends Controller {
+class HotCookedController extends Controller {
 
-  def getTHR(schoolCode: String) = Action {equals()
-    Ok(Json.toJson(THRData(schoolCode)))
+  def getHotCooked(schoolCode: String) = Action {
+    equals()
+    Ok(Json.toJson(HotCookedData(schoolCode)))
   }
 
-  def getTHRDropDown() = Action {
+  def getHotCookedDropDown() = Action {
     Ok(
       Json.arr(
         Json.obj("value" -> "27511010507", "label" -> "PIMPALGAO 2"),
@@ -33,8 +33,8 @@ class THRController extends Controller {
     Ok(DocumentDB.studentImage(schoolCode, studentCode))
   }
 
-  implicit val thrWrite = new Writes[List[THRData]] {
-    override def writes(o: List[THRData]): JsValue = Json.obj(
+  implicit val thrWrite = new Writes[List[HotCookedData]] {
+    override def writes(o: List[HotCookedData]): JsValue = Json.obj(
       "data" -> o
     )
   }

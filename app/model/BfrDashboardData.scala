@@ -15,8 +15,9 @@ case class BfrDashboardData(attendanceData: AttendanceData,
                             monthData: List[MonthData])
 
 object BfrDashboardData {
-  def apply(filters: Option[Map[String, String]] = None): Either[List[String], BfrDashboardData] = {
-    DocumentDB.dashboardData(filters) match {
+  def apply(filters: Option[Map[String, String]] = None,dashboardType:String): Either[List[String], BfrDashboardData] = {
+
+    DocumentDB.dashboardData(filters,dashboardType) match {
       case Left(l) => Left(l)
       case Right(r) => Right(createBfrDashboardData(r))
     }
