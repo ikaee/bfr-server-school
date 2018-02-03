@@ -17,13 +17,12 @@ export default () =>
         <section id="container">
             <DocumentTitle title="BFR"/>
             <Favicon url={faviconImage}/>
-            <Header title={"ICDS"} date={"January 2018"} />
+            <Header title={""} date={"February 2018"} />
             <NavMenu/>
             <section id={"main-content"}>
                 <Route exact path="/" component={Dashboard}/>
                 <Route path="/amr" component={AMR}/>
-                <Route path="/thr" component={THR}/>
-                <Route path="/hot-cooked" component={HotCooked}/>
+                <Route path="/mid-day" component={HotCooked}/>
                 <Route path="/admin" component={Admin}/>
             </section>
             {/*<Footer />*/}

@@ -13,7 +13,9 @@ case class AMRData(schoolCode: String,
                    surname: String,
                    gender: String,
                    dob: String,
-                   attendance: String)
+                   datestamp: String,
+                   lattitude:String,
+                   longitude:String)
 
 object AMRData {
   def apply(schoolCode: String): List[AMRData] = {
@@ -28,7 +30,9 @@ object AMRData {
       "surname" -> a.surname,
       "gender" -> a.gender,
       "dob" -> a.dob,
-      "attendance" -> a.attendance
+      "datestamp" -> a.datestamp,
+      "lattitude"-> a.lattitude,
+      "longitude"-> a.longitude
     )
   }
 }

@@ -79,7 +79,7 @@ object DocumentDB {
     val amrs = present.map(p => master.find(m => m.get("studentcode") == p.get("studentcode")) match {
       case None => None
       case Some(m) =>
-        Some(AMRData(m.get("schoolcode"), m.get("studentcode"), m.get("name"), m.get("surname"), m.get("gender"), m.get("dob"), p.get("datestamp")))
+        Some(AMRData(m.get("schoolcode"), m.get("studentcode"), m.get("name"), m.get("surname"), m.get("gender"), m.get("dob"), p.get("datestamp"),p.get("lattitude"),p.get("longitude")))
     })
 
     amrs match {
@@ -109,7 +109,7 @@ object DocumentDB {
     val hotCooked = present.map(p => master.find(m => m.get("studentcode") == p.get("studentcode")) match {
       case None => None
       case Some(m) =>
-        Some(HotCookedData(m.get("schoolcode"), m.get("studentcode"), m.get("name"), m.get("surname"), m.get("gender"), m.get("dob"), p.get("datestamp")))
+        Some(HotCookedData(m.get("schoolcode"), m.get("studentcode"), m.get("name"), m.get("surname"), m.get("gender"), m.get("dob"), p.get("datestamp"),p.get("lattitude"),p.get("longitude")))
     })
 
     hotCooked match {

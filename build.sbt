@@ -1,6 +1,6 @@
 import com.typesafe.sbt.packager.docker.{Cmd, ExecCmd}
 
-name := """bfr-server"""
+name := """bfr-server-school"""
 version := "1.0-SNAPSHOT"
 scalaVersion := "2.11.8"
 
@@ -29,7 +29,7 @@ dockerCommands := Seq(
   ExecCmd("RUN", "chown", "-R", "daemon:daemon", "."),
   Cmd("USER", "daemon"),
   Cmd("ENV","APPLICATION_SECRET lnY7KObrO/P^T<@mTKt7olO@lxGi]yA[1=__?VDW;qY9WjebDM@YAQ9`dx9W4F2A"),
-  ExecCmd("ENTRYPOINT", "bin/bfr-server"),
+  ExecCmd("ENTRYPOINT", "bin/bfr-server-school"),
   ExecCmd("CMD", "")
 )
 

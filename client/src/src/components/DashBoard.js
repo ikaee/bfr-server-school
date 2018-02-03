@@ -16,7 +16,7 @@ class Dashboard extends Component {
             data: {},
             loaded: true,
             selectedOption: {value: 'attendance', label: 'Attendance'},
-            options: [{value: 'attendance', label: 'Attendance'}, {value: "thr", label: "Take Home Ration"}, {value: 'hot-cooked', label: 'HotMeals'}]
+            options: [{value: 'attendance', label: 'Attendance'}, {value: 'hot-cooked', label: 'Mid day Meals'}]
         }
     }
 
@@ -45,7 +45,6 @@ class Dashboard extends Component {
             _ => this.setState({selectedOption: '', reportData: [], loaded: true}),
             _ => {
                 axios.get(`/bfr/v1/dashboard/${selectedOption.value}`).then(res => {
-                    console.log("called got data",res.data);
                     this.setState({
                         selectedOption,
                         data: res.data,

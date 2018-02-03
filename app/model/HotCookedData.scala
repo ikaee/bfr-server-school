@@ -9,7 +9,9 @@ case class HotCookedData(schoolCode: String,
                          surname: String,
                          gender: String,
                          dob: String,
-                         datestamp: String)
+                         datestamp: String,
+                         lattitude:String,
+                         longitude:String)
 
 object HotCookedData {
   def apply(schoolCode: String): List[HotCookedData] = {
@@ -24,7 +26,9 @@ object HotCookedData {
       "surname" -> a.surname,
       "gender" -> a.gender,
       "dob" -> a.dob,
-      "datestamp" -> a.datestamp
+      "datestamp" -> a.datestamp,
+      "lattitude" -> a.lattitude,
+      "longitude" -> a.longitude
     )
   }
 }
